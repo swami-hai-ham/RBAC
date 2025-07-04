@@ -34,3 +34,13 @@ export const login = async (req, res) => {
     res.status(500).json({ message: 'Login failed', error: err.message });
   }
 };
+
+
+export const getMe = async (req, res) => {
+  try {
+    const { _id, name, email, role } = req.user;
+    res.status(200).json({ id: _id, name, email, role });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch user info' });
+  }
+};

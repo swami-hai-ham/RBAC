@@ -5,6 +5,7 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import User from './models/User.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -27,15 +28,16 @@ const seedAdmin = async () => {
 };
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    seedAdmin()
-  })
-  .catch(err => console.error('DB connection failed', err));
+.then(() => {
+  seedAdmin()
+})
+.catch(err => console.error('DB connection failed', err));
 
 
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/tasks', taskRoutes);
+app.use('/api/v1/users', userRoutes);
 
 app.get('/', (req, res) => res.send('API running'));
 
