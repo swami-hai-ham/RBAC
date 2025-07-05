@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import Task from '../models/Task.js';
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -35,7 +36,14 @@ export const deleteUser = async (req, res) => {
     }
 
     await User.findByIdAndDelete(req.params.id);
-    res.json({ message: 'User deleted' });
+    await Task.deleteMany({ 
+      $or: [
+        { assignedTo: req.params.id }, 
+        { createdBy: req.params.id }
+      ] 
+    });
+
+    res.json({ message: 'User and related tasks deleted' });
   } catch {
     res.status(500).json({ message: 'Failed to delete user' });
   }
