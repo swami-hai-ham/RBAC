@@ -1,47 +1,61 @@
+import { Box, Typography, Button, MenuItem, TextField } from '@mui/material';
 import { useState } from 'react';
-import { Card, CardContent, Typography, Box, Button, MenuItem, TextField } from '@mui/material';
 import api from '../api/api';
 
-export default function TaskCard({ task, user, onUpdate }) {
+export default function TaskCard({ task, user, onUpdate, allUsers }) {
+  const [newAssignee, setNewAssignee] = useState(task.assignedTo?._id || '');
   const [status, setStatus] = useState(task.status);
 
-  const handleStatusChange = async (e) => {
-    const newStatus = e.target.value;
-    setStatus(newStatus);
-    await api.patch(`/v1/tasks/${task._id}`, { status: newStatus });
-    onUpdate();
-  };
-
-  const handleDelete = async () => {
-    await api.delete(`/v1/tasks/${task._id}`);
+  const handleUpdate = async () => {
+    await api.patch(`/v1/tasks/${task._id}`, {
+      status,
+      assignedTo: newAssignee
+    });
     onUpdate();
   };
 
   return (
-    <Card sx={{ my: 2 }}>
-      <CardContent>
-        <Typography variant="h6">{task.title}</Typography>
-        <Typography variant="body2" gutterBottom>{task.description}</Typography>
-        <Typography variant="body2">Assigned To: {task.assignedTo?.name || task.assignedTo}</Typography>
+    <Box border={1} borderRadius={2} p={2} mb={2} mt={2}>
+      <Typography variant="h6">{task.title}</Typography>
+      <Typography>{task.description}</Typography>
+      <Typography>Status: {task.status}</Typography>
+      <Typography>Assigned To: {task.assignedTo?.name}</Typography>
 
-        <Box display="flex" alignItems="center" mt={2} gap={2}>
+      {/* Admin/Manager can reassign */}
+      {['Admin', 'Manager'].includes(user.role) && (
+        <Box mt={2} display="flex" gap={2}>
           <TextField
             select
-            label="Status"
-            value={status}
-            onChange={handleStatusChange}
+            label="Change Assignee"
+            value={newAssignee}
+            onChange={(e) => setNewAssignee(e.target.value)}
             size="small"
+            sx={{ minWidth: 180 }}
           >
-            {['ToDo', 'InProgress', 'Done'].map(s => (
-              <MenuItem key={s} value={s}>{s}</MenuItem>
+            {allUsers.map((u) => (
+              <MenuItem key={u._id} value={u._id}>
+                {u.name}
+              </MenuItem>
             ))}
           </TextField>
 
-          {(user.role === 'Admin' || user.role === 'Manager') && (
-            <Button variant="outlined" color="error" onClick={handleDelete}>Delete</Button>
-          )}
+          <TextField
+            select
+            label="Change Status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            size="small"
+          >
+            {['ToDo', 'InProgress', 'Done'].map((s) => (
+              <MenuItem key={s} value={s}>
+                {s}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <Button onClick={handleUpdate} variant="contained">Update</Button>
         </Box>
-      </CardContent>
-    </Card>
+      )}
+    </Box>
   );
 }

@@ -35,14 +35,16 @@ export default function Dashboard() {
   };
 
   const handleRoleChange = async (id, newRole) => {
-  await api.put(`/v1/users/${id}`, { role: newRole });
-  fetchUsers();
-};
+    await api.put(`/v1/users/${id}`, { role: newRole });
+    fetchUsers();
+  };
 
-const handleDeleteUser = async (id) => {
-  await api.delete(`/v1/users/${id}`);
-  fetchUsers();
-};
+  const handleDeleteUser = async (id) => {
+    await api.delete(`/v1/users/${id}`);
+    fetchUsers();    
+    fetchTasks();    
+  };
+
 
 
   const handleLogout = () => {
@@ -162,7 +164,7 @@ const handleDeleteUser = async (id) => {
 
 
         {tasks.map(t => (
-          <TaskCard key={t._id} task={t} user={user} onUpdate={fetchTasks} />
+          <TaskCard key={t._id} task={t} user={user} onUpdate={fetchTasks} allUsers={allUsers}/>
         ))}
 
         {['Admin', 'Manager'].includes(user.role) && (
