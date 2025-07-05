@@ -12,7 +12,7 @@ export default function Login({ onLogin }) {
       localStorage.setItem('token', res.data.token);
       onLogin();
     } catch (err) {
-      alert(`Login failed ${err}`);
+      console.log(`Login failed ${err}`);
     }
   };
 

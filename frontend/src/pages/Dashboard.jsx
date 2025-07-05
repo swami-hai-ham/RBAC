@@ -52,8 +52,14 @@ const handleDeleteUser = async (id) => {
 
   useEffect(() => {
     fetchUser();
-    fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (['Admin', 'Manager'].includes(user.role)) {
+      fetchUsers();
+    }
+  }, [user.role]);
+
 
   useEffect(() => {
     fetchTasks();

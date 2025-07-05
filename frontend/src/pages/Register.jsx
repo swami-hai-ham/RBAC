@@ -15,7 +15,7 @@ export default function Register({ onRegister }) {
       localStorage.setItem('token', res.data.token);
       onRegister();
     } catch (err) {
-      alert(`Registration failed ${err}`);
+      console.log(`Registration failed ${err}`);
     }
   };
 
