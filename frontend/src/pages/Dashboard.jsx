@@ -76,46 +76,46 @@ const handleDeleteUser = async (id) => {
 
       <Container>
       {['Admin', 'Manager'].includes(user.role) && (
-  <>
-    <Typography variant="h5" mt={4}>Users</Typography>
-    <Box display="flex" flexDirection="column" gap={2} mt={1}>
-      {allUsers.filter(u => u._id !== user._id && u.role !== user.role).map(u => (
-        <Box
-          key={u._id}
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          border={1}
-          borderColor="grey.300"
-          p={2}
-          borderRadius={1}
-        >
-          <Box>
-            <Typography variant="subtitle1">{u.name}</Typography>
-            <Typography variant="body2" color="textSecondary">{u.email}</Typography>
-            <Typography variant="caption">Role: {u.role}</Typography>
-          </Box>
+          <>
+            <Typography variant="h5" mt={4}>Users</Typography>
+            <Box display="flex" flexDirection="column" gap={2} mt={1}>
+              {allUsers.filter(u => u._id !== user._id && u.role !== user.role).map(u => (
+                <Box
+                  key={u._id}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  border={1}
+                  borderColor="grey.300"
+                  p={2}
+                  borderRadius={1}
+                >
+                  <Box>
+                    <Typography variant="subtitle1">{u.name}</Typography>
+                    <Typography variant="body2" color="textSecondary">{u.email}</Typography>
+                    <Typography variant="caption">Role: {u.role}</Typography>
+                  </Box>
 
-          {user.role === 'Admin' && (
-            <Box display="flex" gap={1}>
-              <TextField
-                select
-                size="small"
-                value={u.role}
-                onChange={(e) => handleRoleChange(u._id, e.target.value)}
-              >
-                {['Admin', 'Manager', 'Member'].map(r => (
-                  <MenuItem key={r} value={r}>{r}</MenuItem>
-                ))}
-              </TextField>
-              <Button variant="outlined" color="error" onClick={() => handleDeleteUser(u._id)}>Delete</Button>
+                  {user.role === 'Admin' && (
+                    <Box display="flex" gap={1}>
+                      <TextField
+                        select
+                        size="small"
+                        value={u.role}
+                        onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                      >
+                        {['Admin', 'Manager', 'Member'].map(r => (
+                          <MenuItem key={r} value={r}>{r}</MenuItem>
+                        ))}
+                      </TextField>
+                      <Button variant="outlined" color="error" onClick={() => handleDeleteUser(u._id)}>Delete</Button>
+                    </Box>
+                  )}
+                </Box>
+              ))}
             </Box>
-          )}
-        </Box>
-      ))}
-    </Box>
-  </>
-)}
+          </>
+        )}
 
 
         <Typography variant="h4" mt={4}>Tasks</Typography>

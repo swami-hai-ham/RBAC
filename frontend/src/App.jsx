@@ -4,6 +4,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import { useNavigate } from 'react-router-dom';
+import NotFound from './pages/NotFound';
+
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('token'));
@@ -14,6 +16,7 @@ export default function App() {
       <Route path="/" element={loggedIn ? <Dashboard /> : <Navigate to="/login" />} />
       <Route path="/login" element={<Login onLogin={() => {setLoggedIn(true); navigate('/');}} />} />
       <Route path="/register" element={<Register onRegister={() => {setLoggedIn(true); navigate('/');}} />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
