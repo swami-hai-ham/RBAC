@@ -3,9 +3,10 @@ import { protect, authorizeRoles } from '../middleware/authMiddleware.js';
 import { getAllUsers, updateUser, deleteUser } from '../controllers/userController.js';
 
 const router = express.Router();
+router.use(protect); 
 
-router.get('/', protect, authorizeRoles('Admin', 'Manager'), getAllUsers);
-router.put('/:id', protect, authorizeRoles('Admin', 'Manager'), updateUser);
-router.delete('/:id', protect, authorizeRoles('Admin', 'Manager'), deleteUser);
+router.get('/', authorizeRoles('Admin', 'Manager'), getAllUsers);
+router.put('/:id', authorizeRoles('Admin'), updateUser);
+router.delete('/:id', authorizeRoles('Admin'), deleteUser);
 
 export default router;

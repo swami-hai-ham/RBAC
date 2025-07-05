@@ -14,22 +14,23 @@ app.use(express.json());
 
 
 
-const seedAdmin = async () => {
-  const existing = await User.findOne({ email: 'admin@example.com' });
-  if (!existing) {
-    await User.create({
-      name: 'Admin',
-      email: 'admin@example.com',
-      password: 'admin123', 
-      role: 'Admin'
-    });
-    console.log('Default admin seeded');
-  }
-};
+// const seedAdmin = async () => {
+//   const existing = await User.findOne({ email: 'admin@example.com' });
+//   if (!existing) {
+//     await User.create({
+//       name: 'Admin',
+//       email: 'admin@example.com',
+//       password: 'admin123', 
+//       role: 'Admin'
+//     });
+//     console.log('Default admin seeded');
+//   }
+// };
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
-  seedAdmin()
+  console.log("Mongo DB connected")
+  // seedAdmin()
 })
 .catch(err => console.error('DB connection failed', err));
 
