@@ -19,12 +19,16 @@ export const updateUser = async (req, res) => {
       return res.status(403).json({ message: 'Cannot modify Admin' });
     }
 
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('_id name email role');
+    const updates = {};
+    if (req.body.role) updates.role = req.body.role;
+
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true }).select('_id name email role');
     res.json(user);
   } catch {
     res.status(500).json({ message: 'Failed to update user' });
   }
 };
+
 
 export const deleteUser = async (req, res) => {
   try {
