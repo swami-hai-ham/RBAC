@@ -42,6 +42,13 @@ app.use('/api/v1/users', userRoutes);
 
 app.get('/', (req, res) => res.send('API running'));
 
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on ${process.env.PORT}`);
 });
+
+
