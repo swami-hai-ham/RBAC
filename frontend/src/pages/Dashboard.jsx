@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Typography, Button, Container, AppBar, Toolbar, Box } from '@mui/material';
+import { Typography, Button, Container, AppBar, Toolbar, Box, Grid } from '@mui/material';
 import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import CreateTask from '../components/CreateTask';
@@ -86,47 +86,61 @@ export default function Dashboard() {
       {['Admin', 'Manager'].includes(user.role) && (
           <>
             <Typography variant="h5" mt={4}>Users</Typography>
-            <Box display="flex" flexDirection="column" gap={2} mt={1}>
-              {allUsers.filter(u => u._id !== user._id && u.role !== user.role).map(u => (
-                <Box
-                  key={u._id}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  border={1}
-                  borderColor="grey.300"
-                  p={2}
-                  borderRadius={1}
-                >
-                  <Box>
-                    <Typography variant="subtitle1">{u.name}</Typography>
-                    <Typography variant="body2" color="textSecondary">{u.email}</Typography>
-                    <Typography variant="caption">Role: {u.role}</Typography>
-                  </Box>
+            <Grid container spacing={2} mt={1} mb={2}>
+              {allUsers
+                .filter(u => u._id !== user._id && u.role !== user.role)
+                .map(u => (
+                  <Grid item xs={12} sm={6} md={4} key={u._id} sx={{ display: 'flex' }}>
+                    <Box
+                      border={1}
+                      borderColor="grey.300"
+                      p={2}
+                      borderRadius={1}
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="space-between"
+                      width="100%"
+                      sx={{ flex: 1 }}
+                    >
+                      <Box mb={2}>
+                        <Typography variant="subtitle1">{u.name}</Typography>
+                        <Typography variant="body2" color="textSecondary">{u.email}</Typography>
+                        <Typography variant="caption">Role: {u.role}</Typography>
+                      </Box>
 
-                  {user.role === 'Admin' && (
-                    <Box display="flex" gap={1}>
-                      <TextField
-                        select
-                        size="small"
-                        value={u.role}
-                        onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                      >
-                        {['Admin', 'Manager', 'Member'].map(r => (
-                          <MenuItem key={r} value={r}>{r}</MenuItem>
-                        ))}
-                      </TextField>
-                      <Button variant="outlined" color="error" onClick={() => handleDeleteUser(u._id)}>Delete</Button>
+                      {user.role === 'Admin' && (
+                        <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mt={"auto"}>
+                          <TextField
+                            select
+                            size="small"
+                            fullWidth
+                            value={u.role}
+                            onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                          >
+                            {['Admin', 'Manager', 'Member'].map(r => (
+                              <MenuItem key={r} value={r}>{r}</MenuItem>
+                            ))}
+                          </TextField>
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => handleDeleteUser(u._id)}
+                            fullWidth
+                          >
+                            Delete
+                          </Button>
+                        </Box>
+                      )}
                     </Box>
-                  )}
-                </Box>
-              ))}
-            </Box>
+                  </Grid>
+                ))}
+            </Grid>
           </>
         )}
 
 
-        <Typography variant="h4" mt={4}>Tasks</Typography>
+
+        <Typography variant="h4" mt={5}>Tasks</Typography>
         {['Admin', 'Manager'].includes(user.role) && (
           <Box display="flex" gap={2} mt={2}>
             <FormControl size="small" sx={{ minWidth: 160 }}>

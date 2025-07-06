@@ -1,4 +1,4 @@
-import { Box, Typography, Button, MenuItem, TextField } from '@mui/material';
+import { Box, Typography, Button, MenuItem, TextField, Grid } from '@mui/material';
 import { useState } from 'react';
 import api from '../api/api';
 
@@ -21,40 +21,32 @@ export default function TaskCard({ task, user, onUpdate, allUsers }) {
       <Typography>Status: {task.status}</Typography>
       <Typography>Assigned To: {task.assignedTo?.name}</Typography>
 
-      {/* Admin/Manager can reassign */}
       {['Admin', 'Manager'].includes(user.role) && (
-        <Box mt={2} display="flex" gap={2}>
-          <TextField
-            select
-            label="Change Assignee"
-            value={newAssignee}
-            onChange={(e) => setNewAssignee(e.target.value)}
-            size="small"
-            sx={{ minWidth: 180 }}
-          >
-            {allUsers.map((u) => (
-              <MenuItem key={u._id} value={u._id}>
-                {u.name}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            select
-            label="Change Status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            size="small"
-          >
-            {['ToDo', 'InProgress', 'Done'].map((s) => (
-              <MenuItem key={s} value={s}>
-                {s}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <Button onClick={handleUpdate} variant="contained">Update</Button>
-        </Box>
+        <Grid container spacing={2} mt={2}>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              select fullWidth label="Change Assignee" size="small"
+              value={newAssignee} onChange={(e) => setNewAssignee(e.target.value)}
+            >
+              {allUsers.map((u) => (
+                <MenuItem key={u._id} value={u._id}>{u.name}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              select fullWidth label="Change Status" size="small"
+              value={status} onChange={(e) => setStatus(e.target.value)}
+            >
+              {['ToDo', 'InProgress', 'Done'].map((s) => (
+                <MenuItem key={s} value={s}>{s}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Button variant="contained" fullWidth onClick={handleUpdate}>Update</Button>
+          </Grid>
+        </Grid>
       )}
     </Box>
   );
